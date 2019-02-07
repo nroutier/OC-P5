@@ -1,3 +1,3 @@
-OC projet 5 - Utiliser les données publiques de l'OpenFoodFacts
-===============================================================
+OC project 5 - Use OpenFoodFacts public data
+============================================
 
