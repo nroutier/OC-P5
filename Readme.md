@@ -8,7 +8,7 @@ This project is about creating a program to retrieve from OpenFoodFacts API a ty
 
 To install your MySQL Database go to [MySQL Webpage](https://dev.mysql.com/doc/refman/8.0/en/installing.html)
 
-Here is the Database schema: ![Schema](OC-P5/MPD.png)
+Here is the Database schema: ![Schema](https://github.com/nroutier/OC-P5/MPD.png)
 
 SQL Script to initiate the database: `soon to be release`
 
