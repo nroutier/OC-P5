@@ -57,9 +57,9 @@ CREATE TABLE Cat_prd(
 -- Creating Foreign keys
 
 ALTER TABLE Shop_prd 
-ADD FOREIGN KEY (id_product) REFERENCES Product(id),
-ADD FOREIGN KEY (id_shop) REFERENCES Shop(id);
+ADD CONSTRAINT fk_shop_prd_prd FOREIGN KEY (id_product) REFERENCES Product(id),
+ADD CONSTRAINT fk_shop_prd_shop FOREIGN KEY (id_shop) REFERENCES Shop(id);
 
 ALTER TABLE Cat_prd
-ADD FOREIGN KEY (id_product) REFERENCES Product(id),
-ADD FOREIGN KEY (id_category) REFERENCES Category(id);
+ADD CONSTRAINT fk_cat_prd_prd FOREIGN KEY (id_product) REFERENCES Product(id),
+ADD CONSTRAINT fk_cat_prd_cat FOREIGN KEY (id_category) REFERENCES Category(id);
