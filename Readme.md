@@ -43,8 +43,11 @@ From MySQL console: `SOURCE path\P5_DB_Init.sql`
 
 ### 3.Launch the program
 The program needs to be run in the terminal. 
-Execute this Python Script to : `To come`
+Execute this Python Script to :
+
 `$ cd myproject`
+
 `$ pipenv install requests`
+
 `$ pipenv run python main.py`
 
