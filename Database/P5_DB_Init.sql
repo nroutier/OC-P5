@@ -36,19 +36,22 @@ CREATE TABLE Product (
     desription TEXT NOT NULL,
     note INT(4),
     shop VARCHAR(100) NOT NULL,
+    id_category INT NOT NULL,
     PRIMARY KEY(id),
     INDEX ind_name (name),
     INDEX ind_note (note)
 ) ENGINE=InnoDB;
 
-CREATE TABLE Cat_prd(
-    id_product INT UNSIGNED,
-    id_category INT UNSIGNED,
-    PRIMARY KEY(id_product, id_category)
+CREATE TABLE Saved (
+    id_product INT NOT NULL,
+    id_user INT NOT NULL
 ) ENGINE=InnoDB;
 
 -- Creating Foreign keys
 
-ALTER TABLE Cat_prd
-ADD CONSTRAINT fk_cat_prd_prd FOREIGN KEY (id_product) REFERENCES Product(id),
-ADD CONSTRAINT fk_cat_prd_cat FOREIGN KEY (id_category) REFERENCES Category(id);
+ALTER TABLE Product
+ADD CONSTRAINT fk_prd_cat FOREIGN KEY (id_category) REFERENCES Category(id);
+
+ALTER TABLE Saved 
+ADD CONSTRAINT fk_sav_prd FOREIGN KEY (id_product) REFERENCES Product(id),
+ADD CONSTRAINT fk_sav_user FOREIGN KEY (id_user) REFERENCES User(id);
