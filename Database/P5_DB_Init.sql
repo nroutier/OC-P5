@@ -2,7 +2,7 @@
 CREATE DATABASE OC_P5 CHARACTER SET 'utf8';
 
 -- Creating the user
-CREATE USER 'svc_oc_p5' [IDENTIFIED BY 'passw0rd'];
+CREATE USER 'svc_oc_p5' IDENTIFIED BY 'passw0rd';
 
 -- Giving all privelege to user svc_oc_p5
 GRANT ALL PRIVILEGES ON OC_P5.* TO 'svc_oc_p5';
@@ -24,7 +24,7 @@ CREATE TABLE User (
 CREATE TABLE Category (
 	id INT UNSIGNED AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL,
-	url VARCHAR(100) NOT NULL,
+	url VARCHAR(500) NOT NULL,
 	PRIMARY KEY(id),
     INDEX ind_name (name)
 ) ENGINE=InnoDB;
@@ -32,19 +32,19 @@ CREATE TABLE Category (
 CREATE TABLE Product (
     id INT UNSIGNED AUTO_INCREMENT,
     name VARCHAR(100) NOT NULL,
-	url VARCHAR(100) NOT NULL,
-    desription TEXT NOT NULL,
-    note INT(4),
-    shop VARCHAR(100) NOT NULL,
-    id_category INT NOT NULL,
+    description TEXT,
+    grade VARCHAR(2),
+	url VARCHAR(500) NOT NULL,
+    stores VARCHAR(1000),
+    id_category INT UNSIGNED NOT NULL,
     PRIMARY KEY(id),
     INDEX ind_name (name),
-    INDEX ind_note (note)
+    INDEX ind_grade (grade)
 ) ENGINE=InnoDB;
 
 CREATE TABLE Saved (
-    id_product INT NOT NULL,
-    id_user INT NOT NULL
+    id_product INT UNSIGNED NOT NULL,
+    id_user INT UNSIGNED NOT NULL
 ) ENGINE=InnoDB;
 
 -- Creating Foreign keys

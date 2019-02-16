@@ -36,7 +36,7 @@ SQL Script to initiate the database: [P5_DB_Init.sql](https://github.com/nroutie
 
 From MySQL console: `SOURCE path\P5_DB_Init.sql`
 
-### 2.Filling up the database with OpenFoodFacts French data from the OpenFoodFacts API
+### 2.Feed the database with OpenFoodFacts French data from the OpenFoodFacts API
 
 [Open Food Facts API](https://en.wiki.openfoodfacts.org/API/Read/Search)
 
@@ -48,6 +48,8 @@ Execute this Python Script to :
 `$ cd myproject`
 
 `$ pipenv install requests`
+
+`install mysql-connector-python`
 
 `$ pipenv run python main.py`
 
