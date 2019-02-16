@@ -39,7 +39,9 @@ class Db_module:
             self.cursor.execute(sql_insert_cat, cat_toinsert)
             self.connection.commit()
             cat_name = cat["name"]
-            self.cursor.execute("SELECT id FROM Category WHERE name = %s", (cat_name,))
+            self.cursor.execute(
+                "SELECT id FROM Category WHERE name = %s",
+                (cat_name,))
             cat_id = self.cursor.fetchall()[0][0]
             prod_toinsert = []
             for prod in cat["products"]:
@@ -61,10 +63,20 @@ class Db_module:
         return self.cursor.fetchall()
 
     def get_products(self, cat, nb):
-        query = ("SELECT prd.name, prd.description, prd.grade, prd.url, prd.stores, cat.name \
+        query = ("SELECT DISTINCT prd.name, prd.description, prd.grade, \
+            prd.url, prd.stores, cat.name \
             FROM Product AS prd \
             INNER JOIN Category AS cat ON prd.id_category = cat.id \
             WHERE cat.name = %s LIMIT %s")
 
         self.cursor.execute(query, (cat, nb,))
         return self.cursor.fetchall()
+
+    def get_bestproduct(self, cat):
+        query = ("SELECT prd.name, prd.description, prd.grade, prd.url, prd.stores, cat.name \
+            FROM Product AS prd \
+            INNER JOIN Category AS cat ON prd.id_category = cat.id \
+            WHERE cat.name = %s ORDER BY prd.grade LIMIT 1")
+
+        self.cursor.execute(query, (cat,))
+        return self.cursor.fetchall()[0]

@@ -13,14 +13,6 @@ USE OC_P5;
 
 -- Creating Tables
 
-CREATE TABLE User (
-    id INT UNSIGNED AUTO_INCREMENT,
-    pseudo VARCHAR(100) NOT NULL,
-    password CHAR(40),
-    PRIMARY KEY(id),
-    UNIQUE INDEX ind_pseudo(pseudo)
-) ENGINE=InnoDB;
-
 CREATE TABLE Category (
 	id INT UNSIGNED AUTO_INCREMENT,
 	name VARCHAR(100) NOT NULL,
@@ -43,8 +35,7 @@ CREATE TABLE Product (
 ) ENGINE=InnoDB;
 
 CREATE TABLE Saved (
-    id_product INT UNSIGNED NOT NULL,
-    id_user INT UNSIGNED NOT NULL
+    id_product INT UNSIGNED NOT NULL
 ) ENGINE=InnoDB;
 
 -- Creating Foreign keys
@@ -53,5 +44,4 @@ ALTER TABLE Product
 ADD CONSTRAINT fk_prd_cat FOREIGN KEY (id_category) REFERENCES Category(id);
 
 ALTER TABLE Saved 
-ADD CONSTRAINT fk_sav_prd FOREIGN KEY (id_product) REFERENCES Product(id),
-ADD CONSTRAINT fk_sav_user FOREIGN KEY (id_user) REFERENCES User(id);
+ADD CONSTRAINT fk_sav_prd FOREIGN KEY (id_product) REFERENCES Product(id);

@@ -18,7 +18,9 @@ class Main:
 
     cls()
     while True:
-        print("1 - Alimenter la base de données avec les données d'Open Food Facts")
+        print(
+            "1 - Alimenter la base de données avec les données d'Open Food",
+            " Facts")
         print("2 - Quel aliment souhaitez-vous remplacer ?")
         print("3 - Retrouver mes aliments substitués")
         inp = input("Votre choix: ")
@@ -60,7 +62,9 @@ class Main:
                 break
             else:
                 cls()
-                print("Vous devez entrer un chiffre correspondant à une catégorie")
+                print(
+                    "Vous devez entrer un chiffre correspondant",
+                    " à une catégorie")
                 print("")
         cls()
         products = db.get_products(cats[int(inp) - 1][1], 10)
@@ -79,7 +83,9 @@ class Main:
                 break
             else:
                 cls()
-                print("Vous devez entrer un chiffre correspondant à un produit")
+                print(
+                    "Vous devez entrer un chiffre correspondant",
+                    " à un produit")
                 print("")
         cls()
         print("Détail de l'aliment:")
@@ -91,6 +97,23 @@ class Main:
         print("url: ", products[inp - 1][3])
         print("Magasins: ", products[inp - 1][4])
         print("Catégorie: ", products[inp - 1][5])
+        print("")
+        print("____________________")
+        if products[inp - 1][2] != "a":
+            bestproduct = db.get_bestproduct(products[inp - 1][5])
+            print("")
+            print(
+                "Vous pourriez remplacer cet aliment le suivant",
+                " qui est mieux noté:")
+            print("")
+            print("Nom du produit: ", bestproduct[0])
+            print("Description: ", bestproduct[1])
+            print("Note: ", bestproduct[2])
+            print("url: ", bestproduct[3])
+            print("Magasins: ", bestproduct[4])
+            print("Catégorie: ", bestproduct[5])
+            print("")
+
         del db
 
 if __name__ == "__main__":
