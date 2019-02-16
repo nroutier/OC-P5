@@ -25,10 +25,8 @@ class Db_module:
         )
         self.cursor = self.connection.cursor()
 
-    def query(self, query, params):
-        return self.cursor.execute(query, params)
-
     def __del__(self):
+        self.cursor.close()
         self.connection.close()
 
     def feeddb(self, cats):
@@ -56,3 +54,17 @@ class Db_module:
             stores, id_category) VALUES (%s, %s, %s, %s, %s, %s)"
             self.cursor.executemany(sql_insert_prod, prod_toinsert)
             self.connection.commit()
+
+    def get_categories(self, nb):
+        query = ("SELECT * FROM Category LIMIT %s")
+        self.cursor.execute(query, (nb,))
+        return self.cursor.fetchall()
+
+    def get_products(self, cat, nb):
+        query = ("SELECT prd.name, prd.description, prd.grade, prd.url, prd.stores, cat.name \
+            FROM Product AS prd \
+            INNER JOIN Category AS cat ON prd.id_category = cat.id \
+            WHERE cat.name = %s LIMIT %s")
+
+        self.cursor.execute(query, (cat, nb,))
+        return self.cursor.fetchall()
