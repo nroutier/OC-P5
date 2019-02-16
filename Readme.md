@@ -38,7 +38,11 @@ From MySQL console: `SOURCE path\P5_DB_Init.sql`
 
 ### 2.Feed the database with OpenFoodFacts French data from the OpenFoodFacts API
 
-[Open Food Facts API](https://en.wiki.openfoodfacts.org/API/Read/Search)
+The program is based on data stored on [Open Food Facts](https://fr.openfoodfacts.org/) website.
+
+It uses the [Requests](http://docs.python-requests.org/en/master/) library to get the [Open Food Facts Categories Json file](https://fr.openfoodfacts.org/categories.json) to retrieve the categories of products and the [Open Food Facts API](https://en.wiki.openfoodfacts.org/API/Read/Search) to get the products for each category.
+
+Then it uses the [MySQL Connector](https://dev.mysql.com/doc/connector-python/en/) to interact with the database.
 
 
 ### 3.Launch the program
@@ -49,7 +53,7 @@ Execute this Python Script to :
 
 `$ pipenv install requests`
 
-`install mysql-connector-python`
+`$ pipenv install mysql-connector-python`
 
 `$ pipenv run python main.py`
 
