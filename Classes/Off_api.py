@@ -59,4 +59,3 @@ class Off_api:
                                 "url": product["url"],
                                 "stores": product["stores"]
                                 }
-        print(self.cats)
