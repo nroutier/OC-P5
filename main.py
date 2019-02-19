@@ -16,6 +16,17 @@ def clear():
         os.system("clear")
 
 
+def print_product(product):
+    print("Détail de l'aliment:")
+    print("____________________")
+    print("Nom du produit: ", product[0], "  |  Note: ", product[2])
+    print("Catégorie: ", product[5])
+    print("url: ", product[3])
+    print("Magasins: ", product[4])
+    print("Description: ", product[1])
+    print("____________________")
+
+
 class Main:
 
     def menu(user):
@@ -73,7 +84,7 @@ class Main:
                     inp = int(inp)
                 except ValueError:
                     pass
-                if inp in range(1, 10):
+                if inp in range(1, 11):
                     break
                 else:
                     clear()
@@ -82,17 +93,8 @@ class Main:
                         "à un produit")
                     print("")
             clear()
-            print("Détail de l'aliment:")
-            print("____________________")
-            print("")
-            print("Nom du produit: ", products[inp - 1][0])
-            print("Description: ", products[inp - 1][1])
-            print("Note: ", products[inp - 1][2])
-            print("url: ", products[inp - 1][3])
-            print("Magasins: ", products[inp - 1][4])
-            print("Catégorie: ", products[inp - 1][5])
-            print("")
-            print("____________________")
+            product = products[inp - 1]
+            print_product(product)
             if products[inp - 1][2] != "a":
                 bestproduct = db.get_bestproduct(products[inp - 1][5])
                 print("")
@@ -100,15 +102,7 @@ class Main:
                     "Vous pourriez remplacer cet aliment par le suivant",
                     "qui est mieux noté:")
                 print("")
-                print("Nom du produit: ", bestproduct[0])
-                print("Description: ", bestproduct[1])
-                print("Note: ", bestproduct[2])
-                print("url: ", bestproduct[3])
-                print("Magasins: ", bestproduct[4])
-                print("Catégorie: ", bestproduct[5])
-                print("")
-                print("____________________")
-                print("")
+                print_product(bestproduct)
                 while True:
                     inp = input("Souhaitez-vous sauvegarder ce substitut ? \
 O/N: ")
@@ -158,16 +152,12 @@ O/N: ")
         if inp == 1:
             api = Off_api(NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS)
             api.getdata()
-            # db = Db_module(USER, PASSWORD, DATABASE, HOST, PORT)
             db.feeddb(api.cats)
             menu(pseudo)
-
         elif (inp == 2):
             db.resetdb()
-
         elif (inp == 3):
             menu(pseudo)
-
     elif (db.get_user(pseudo)):
         print("Bienvenue dans le programme", pseudo)
         menu(pseudo)

@@ -17,7 +17,7 @@ class Off_api:
     def getdata(self):
 
         """ Function that gets data from openfoodfact api
-        and return an array of categories with products """
+        and return a dictionnary of categories with products """
 
         cat_url = "https://fr.openfoodfacts.org/categories.json"
         r = requests.get(cat_url)
@@ -41,7 +41,7 @@ class Off_api:
                 "json": "1"}
             r = requests.get(search_url, params=options)
             all_prod = r.json()
-            
+
             for product in all_prod["products"]:
                 if(self.cats[key]["products"].__len__() >= self.nb_prod):
                     break

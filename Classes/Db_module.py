@@ -26,7 +26,6 @@ class Db_module:
         self.cursor = self.connection.cursor()
 
     def __del__(self):
-        # self.cursor.close()
         self.connection.close()
 
     def feeddb(self, cats):
@@ -67,7 +66,6 @@ class Db_module:
             FROM Product AS prd \
             INNER JOIN Category AS cat ON prd.id_category = cat.id \
             WHERE cat.name = %s ORDER BY prd.grade DESC LIMIT %s")
-
         self.cursor.execute(query, (cat, nb,))
         return self.cursor.fetchall()
 
@@ -125,15 +123,18 @@ class Db_module:
         query_user = ("SELECT id FROM User WHERE pseudo = %s")
         self.cursor.execute(query_user, (pseudo,))
         id_user = self.cursor.fetchall()
-        query = ("INSERT INTO Saved_product (id_product, id_user) VALUES \
-            (%s, %s)")
-        self.cursor.execute(query, (id_prd[0][0], id_user[0][0],))
-        self.connection.commit()
+        query_check = "SELECT id_product, id_user FROM Saved_product \
+            WHERE id_product = %s AND id_user = %s"
+        self.cursor.execute(query_check, (id_prd[0][0], id_user[0][0],))
+        if (not self.cursor.fetchall()):
+            query = ("INSERT INTO Saved_product (id_product, id_user) VALUES \
+                (%s, %s)")
+            self.cursor.execute(query, (id_prd[0][0], id_user[0][0],))
+            self.connection.commit()
+        else:
+            return print("Vous avez déjà sauvegardé l'aliment!")
 
     def get_savedproducts(self, pseudo):
-        # query_user = ("SELECT id FROM User WHERE pseudo = %s")
-        # self.cursor.execute(query_user, (pseudo,))
-        # id_user = self.cursor.fetchall()
         query = ("SELECT prd.name FROM Product AS prd \
             INNER JOIN Saved_product AS sp \
                 ON prd.id = sp.id_product \
