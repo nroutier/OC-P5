@@ -11,6 +11,7 @@ class Db_module:
     """ Class that handles the interface with the application database """
 
     def __init__(self, user, password, database, host, port):
+        """ Function to initiate an object from Db_module class """
         self.user = user
         self.password = password
         self.database = database
@@ -26,6 +27,8 @@ class Db_module:
         self.cursor = self.connection.cursor()
 
     def __del__(self):
+        """ Function that close the db connection when deleting the
+        instanciated object """
         self.connection.close()
 
     def feeddb(self, cats):
@@ -56,11 +59,14 @@ class Db_module:
             self.connection.commit()
 
     def get_categories(self, nb):
+        """ Function that gets a number of category from the database """
         query = ("SELECT * FROM Category LIMIT %s")
         self.cursor.execute(query, (nb,))
         return self.cursor.fetchall()
 
     def get_products(self, cat, nb):
+        """ Function that return a number of products
+        for a specified category from the database """
         query = ("SELECT DISTINCT prd.name, prd.description, prd.grade, \
             prd.url, prd.stores, cat.name \
             FROM Product AS prd \
@@ -69,7 +75,19 @@ class Db_module:
         self.cursor.execute(query, (cat, nb,))
         return self.cursor.fetchall()
 
+    def get_product(self, name):
+        """ Function that return a product from the database """
+        query = ("SELECT prd.name, prd.description, prd.grade, \
+            prd.url, prd.stores, cat.name \
+            FROM Product AS prd \
+            INNER JOIN Category AS cat ON prd.id_category = cat.id \
+            WHERE prd.name = %s LIMIT 1")
+        self.cursor.execute(query, (name,))
+        return self.cursor.fetchall()
+
     def get_bestproduct(self, cat):
+        """ Function that return the product with the highest grade
+        from a category """
         query = ("SELECT prd.name, prd.description, prd.grade, prd.url, prd.stores, \
             cat.name, cat.id \
             FROM Product AS prd \
@@ -80,16 +98,20 @@ class Db_module:
         return self.cursor.fetchall()[0]
 
     def create_user(self, pseudo):
+        """ Function that creates a user in the database """
         query = ("INSERT INTO User (pseudo) VALUES (%s)")
         self.cursor.execute(query, (pseudo,))
         self.connection.commit()
 
     def get_user(self, pseudo):
+        """ Function that return a user from the database """
         query = ("SELECT pseudo FROM User WHERE pseudo = %s")
         self.cursor.execute(query, (pseudo,))
         return self.cursor.fetchall()
 
     def resetdb(self):
+        """ Function that empty all tables from the database
+        and just let the root user """
         query = ("DELETE FROM Saved_product")
         self.cursor.execute(query)
         self.connection.commit()
@@ -116,6 +138,7 @@ class Db_module:
         self.connection.commit()
 
     def save_product(self, name, cat, pseudo):
+        """ Function that save a product in the database """
         query_prd = ("SELECT id FROM Product WHERE name = %s \
             AND id_category = %s")
         self.cursor.execute(query_prd, (name, cat,))
@@ -135,6 +158,7 @@ class Db_module:
             return print("Vous avez déjà sauvegardé l'aliment!")
 
     def get_savedproducts(self, pseudo):
+        """ Function that return the saved products for a user """
         query = ("SELECT prd.name FROM Product AS prd \
             INNER JOIN Saved_product AS sp \
                 ON prd.id = sp.id_product \

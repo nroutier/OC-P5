@@ -10,12 +10,14 @@ class Menu():
     """ Class used to generate the different Menus"""
 
     def clear(self):
+        """ Function that clears terminal screen """
         if os.name == "nt":
             os.system("cls")
         else:
             os.system("clear")
 
     def print_product(self, product):
+        """ Function that prints a product in terminal """
         print("Détail de l'aliment:")
         print("____________________")
         print("Nom du produit: ", product[0], "  |  Note: ", product[2])
@@ -25,8 +27,24 @@ class Menu():
         print("Description: ", product[1])
         print("____________________")
 
+    def end_program(self, user, db):
+        """ Function to end the program """
+        while True:
+            inp = input("Revenir au menu (O) ou quitter le programme (Q)")
+            if (inp in ["o", "O"]):
+                self.clear()
+                self.menu(user, db)
+            elif (inp in ["q", "Q"]):
+                self.clear()
+                print("Merci d'avoir utilisé le programme")
+                del db
+                break
+            else:
+                print("Vous devez entrer O ou Q")
+
     def menu(self, user, db):
-        pseudo = user
+        """ Function that generate the program menu """
+        self.clear()
         while True:
             print("1 - Quel aliment souhaitez-vous remplacer ?")
             print("2 - Retrouver mes aliments substitués")
@@ -56,7 +74,7 @@ class Menu():
                     inp = int(inp)
                 except ValueError:
                     pass
-                if inp in range(1, 10):
+                if inp in range(1, 11):
                     break
                 else:
                     self.clear()
@@ -98,9 +116,9 @@ class Menu():
                 self.print_product(bestproduct)
                 while True:
                     inp = input("Souhaitez-vous sauvegarder ce substitut ? \
-    O/N: ")
+O/N: ")
                     if (inp in ["o", "O"]):
-                        db.save_product(bestproduct[0], bestproduct[6], pseudo)
+                        db.save_product(bestproduct[0], bestproduct[6], user)
                         break
                     elif (["n", "N"]):
                         break
@@ -110,17 +128,54 @@ class Menu():
                         print("")
             else:
                 print("Cet aliment possède la note la plus haute, bon choix")
-            del db
+                while True:
+                    inp = input("Souhaitez-vous sauvegarder ce substitut ? \
+O/N: ")
+                    if (inp in ["o", "O"]):
+                        db.save_product(bestproduct[0], bestproduct[6], user)
+                        break
+                    elif (["n", "N"]):
+                        break
+                    else:
+                        self.clear()
+                        print("Vous devez répondre par 'O' ou 'N'")
+                        print("")
+            self.end_program(user, db)
         elif inp == 2:
             self.clear()
-            saved_products = db.get_savedproducts(pseudo)
-            print("Voici les aliments que vous avez sauvegardé: ")
-            print("____________________________________________")
-            for prd in saved_products:
-                print(prd[0])
+            saved_products = db.get_savedproducts(user)
+            while True:
+                print("Voici les aliments que vous avez sauvegardé: ")
+                print("_________________________________________________")
+                for i, prd in enumerate(saved_products):
+                    print(i+1, ". ", prd[0])
+                print("_________________________________________________")
+                inp = input("Souhaitez-vous afficher les détails d'un aliment? \
+O/N: ")
+                if (inp in ["o", "O"]):
+                    inp = input("Sélectionnez l'aliment: ")
+                    try:
+                        inp = int(inp)
+                    except ValueError:
+                        pass
+                    if inp in range(1, saved_products.__len__() + 1):
+                        saved_product = db.get_product(
+                            saved_products[inp - 1][0])
+                        self.print_product(saved_product[0])
+                    else:
+                        self.clear()
+                        print(
+                            "Vous devez entrer un chiffre correspondant",
+                            "à un produit")
+                        print("")
+                elif (inp in ["n", "N"]):
+                    break
+                else:
+                    print("Vous devez entrer O ou N")
+            self.end_program(user, db)
 
     def menu_root(self, user, db, api):
-        pseudo = user
+        """ Function that generate the adminitrator menu """
         while True:
             print("Vous êtes connecté en tant qu'administrateur, voulez vous:")
             print(
@@ -142,8 +197,8 @@ class Menu():
         if inp == 1:
             api.getdata()
             db.feeddb(api.cats)
-            self.menu(pseudo, db)
+            self.menu(user, db)
         elif (inp == 2):
             db.resetdb()
         elif (inp == 3):
-            self.menu(pseudo, db)
+            self.menu(user, db)
