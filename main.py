@@ -6,13 +6,11 @@
 import Classes
 from Classes.Db_module import Db_module
 from Classes.Menu import Menu
-from init import NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS, \
-    USER, PASSWORD, DATABASE, HOST, PORT
+from init import USER, PASSWORD, DATABASE, HOST, PORT
 
 
 class Main:
     """ Class that launch the program """
-
     menu = Menu()
     menu.clear()
     pseudo = input("Entrez votre pseudo: ")
