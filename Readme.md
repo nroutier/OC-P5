@@ -4,16 +4,31 @@ This project is about creating an application to retrieve from OpenFoodFacts API
 
 ## Description of the user's route
 
-The user is on the terminal. The terminal displays two choices:
+Once the program is launched (see section 3), you will have to log in:
 
-1. Which food do you want to replace ?
-2. Find my saved healthy substitued.
+![user_login](https://github.com/nroutier/OC-P5/blob/master/images/login_user.png?raw=true)
 
-When the user selects 1. The application ask the following questions to the user for him to answer:
-* Select the category. [Further proposals are associated to a number. The user enter the corresponding number and press "Enter".]
-* Select food. [Further proposals are associated to a number. The user enter the corresponding number and press "Enter".]
-* The application offer a substitute, its description, a store to buy it and a link to the Open Food Facts webpage for this food.
-* The user can save the result in the database.
+The first time you log in, the program will create your user, then you will be able to log in again with the same pseudo to retreive the products you already saved.
+
+The user is on the terminal. The terminal displays the user menu:
+
+![user_menu](https://github.com/nroutier/OC-P5/blob/master/images/menu_user.png?raw=true)
+
+When entering 1, the program will display the categories that you can choose from:
+
+![user_menu_cats](https://github.com/nroutier/OC-P5/blob/master/images/menu_user_cats.png?raw=true)
+
+Once you enter a number to select a category, you will have the select a product from this category:
+
+![user_menu_products](https://github.com/nroutier/OC-P5/blob/master/images/menu_user_products.png?raw=true)
+
+Then after entering the number for the product you want, the program will display its details and suggest a product with its details from the same category with a higher nutrition grade:
+
+![user_menu_product](https://github.com/nroutier/OC-P5/blob/master/images/menu_user_prod.png?raw=true)
+
+The program offers to the user to save the product in the database, so he will have the opportunity by entering 2 on the first menu to retreive his saved healthy products:
+
+![user_menu_saved_products](https://github.com/nroutier/OC-P5/blob/master/images/menu_user_saved_products.png?raw=true)
 
 ## Functionality
 
@@ -30,11 +45,11 @@ To install your MySQL Database go to [MySQL Webpage](https://dev.mysql.com/doc/r
 
 Here is the Database schema: 
 
-![Schema](https://github.com/nroutier/OC-P5/blob/master/Database/MPD.png?raw=true)
+![Schema](https://github.com/nroutier/OC-P5/blob/master/images/MPD.png?raw=true)
 
 SQL Script to initiate the database: [P5_DB_Init.sql](https://github.com/nroutier/OC-P5/blob/master/Database/P5_DB_Init.sql)
 
-From MySQL console: `SOURCE path\P5_DB_Init.sql`
+From MySQL console as "root": `SOURCE path\P5_DB_Init.sql`
 
 ### 2.Feed the database with OpenFoodFacts French data from the OpenFoodFacts API
 
@@ -44,6 +59,21 @@ It uses the [Requests](http://docs.python-requests.org/en/master/) library to ge
 
 Then it uses the [MySQL Connector](https://dev.mysql.com/doc/connector-python/en/) to interact with the database.
 
+#### The Administrator menu:
+
+Once your database is created with all the tables (see section 1), you will need to feed the database with the data from Open Food Fact.
+
+To do so, you will have to launch the program (see section 3) and log in as root:
+
+![root_login](https://github.com/nroutier/OC-P5/blob/master/images/login_root.png?raw=true)
+
+Once logged in, the Administrator menu will display:
+
+![root_menu](https://github.com/nroutier/OC-P5/blob/master/images/menu_root.png?raw=true)
+
+For a first use of the program, you will have to enter 1 to feed the database.
+
+If you want to empty the tables with all data from Open Food Facts and created users (except from root), you can enter 2.
 
 ### 3.Launch the program
 The program needs to be run in the terminal. 
