@@ -58,6 +58,34 @@ class Db_module:
             self.cursor.executemany(sql_insert_prod, prod_toinsert)
             self.connection.commit()
 
+    def resetdb(self):
+        """ Function that empty all tables from the database
+        and just let the root user """
+        query = ("DELETE FROM Saved_product")
+        self.cursor.execute(query)
+        self.connection.commit()
+        query = ("DELETE FROM Product")
+        self.cursor.execute(query)
+        self.connection.commit()
+        query = ("DELETE FROM Category")
+        self.cursor.execute(query)
+        self.connection.commit()
+        query = ("DELETE FROM User")
+        self.cursor.execute(query)
+        self.connection.commit()
+        query = ("ALTER TABLE Category AUTO_INCREMENT = 0")
+        self.cursor.execute(query)
+        query = ("ALTER TABLE Product AUTO_INCREMENT = 0")
+        self.cursor.execute(query)
+        query = ("ALTER TABLE Saved_product AUTO_INCREMENT = 0")
+        self.cursor.execute(query)
+        query = ("ALTER TABLE User AUTO_INCREMENT = 0")
+        self.cursor.execute(query)
+        self.connection.commit()
+        query = ("INSERT INTO User (pseudo) VALUES ('root')")
+        self.cursor.execute(query)
+        self.connection.commit()
+
     def get_categories(self, nb):
         """ Function that gets a number of category from the database """
         query = ("SELECT * FROM Category LIMIT %s")
@@ -109,34 +137,6 @@ class Db_module:
         self.cursor.execute(query, (pseudo,))
         return self.cursor.fetchall()
 
-    def resetdb(self):
-        """ Function that empty all tables from the database
-        and just let the root user """
-        query = ("DELETE FROM Saved_product")
-        self.cursor.execute(query)
-        self.connection.commit()
-        query = ("DELETE FROM Product")
-        self.cursor.execute(query)
-        self.connection.commit()
-        query = ("DELETE FROM Category")
-        self.cursor.execute(query)
-        self.connection.commit()
-        query = ("DELETE FROM User")
-        self.cursor.execute(query)
-        self.connection.commit()
-        query = ("ALTER TABLE Category AUTO_INCREMENT = 0")
-        self.cursor.execute(query)
-        query = ("ALTER TABLE Product AUTO_INCREMENT = 0")
-        self.cursor.execute(query)
-        query = ("ALTER TABLE Saved_product AUTO_INCREMENT = 0")
-        self.cursor.execute(query)
-        query = ("ALTER TABLE User AUTO_INCREMENT = 0")
-        self.cursor.execute(query)
-        self.connection.commit()
-        query = ("INSERT INTO User (pseudo) VALUES ('root')")
-        self.cursor.execute(query)
-        self.connection.commit()
-
     def save_product(self, name, cat, pseudo):
         """ Function that save a product in the database """
         query_prd = ("SELECT id FROM Product WHERE name = %s \
@@ -165,4 +165,10 @@ class Db_module:
                     INNER JOIN User AS usr ON sp.id_user = usr.id \
                         WHERE usr.pseudo = %s")
         self.cursor.execute(query, (pseudo,))
+        return self.cursor.fetchall()
+
+    def check_db(self):
+        """ Function that check if the db is already fed """
+        query = ("SELECT * FROM Product")
+        self.cursor.execute(query)
         return self.cursor.fetchall()

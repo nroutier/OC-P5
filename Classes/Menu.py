@@ -4,6 +4,10 @@
 """ Module that defines the class Menu """
 
 import os
+import init
+from init import NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS
+import Classes
+from Classes.Get_off_data import Get_off_data
 
 
 class Menu():
@@ -174,7 +178,7 @@ O/N: ")
                     print("Vous devez entrer O ou N")
             self.end_program(user, db)
 
-    def menu_root(self, user, db, api):
+    def menu_root(self, user, db):
         """ Function that generate the adminitrator menu """
         while True:
             print("Vous êtes connecté en tant qu'administrateur, voulez vous:")
@@ -195,9 +199,14 @@ O/N: ")
                 print("Vous devez entrer un chiffre en 1 et 3")
                 print("")
         if inp == 1:
-            api.getdata()
-            db.feeddb(api.cats)
-            self.menu(user, db)
+            check = db.check_db()
+            if (check):
+                print("La base de données a déjà été alimentée")
+            else:
+                api = Get_off_data(NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS)
+                api.getdata()
+                db.feeddb(api.cats)
+                print("La base de données vient d'être alimentée")
         elif (inp == 2):
             db.resetdb()
         elif (inp == 3):
