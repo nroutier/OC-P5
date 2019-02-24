@@ -4,9 +4,7 @@
 """ Main script to launch the program """
 
 import Classes
-from Classes.Db_module import Db_module
 from Classes.Menu import Menu
-from init import USER, PASSWORD, DATABASE, HOST, PORT
 
 
 class Main:
@@ -14,15 +12,7 @@ class Main:
     menu = Menu()
     menu.clear()
     pseudo = input("Entrez votre pseudo: ")
-    db = Db_module(USER, PASSWORD, DATABASE, HOST, PORT)
-    if (pseudo == "root"):
-        menu.menu_root(pseudo, db)
-    elif (db.get_user(pseudo)):
-        menu.menu(pseudo, db)
-    else:
-        db.create_user(pseudo)
-        menu.menu(pseudo, db)
-    del db
+    menu.user(pseudo)
 
 if __name__ == "__main__":
     program = Main()

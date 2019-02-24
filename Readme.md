@@ -76,14 +76,20 @@ For a first use of the program, you will have to enter 1 to feed the database.
 If you want to empty the tables with all data from Open Food Facts and created users (except from root), you can enter 2.
 
 ### 3.Launch the program
-The program needs to be run in the terminal. 
-Execute this Python Script to :
 
-`$ cd myproject`
+The program is using Python 3.7.1, make sure you have Python and pip installed.
+
+I used pipenv [pipenv](https://pipenv.readthedocs.io/en/latest/install/), but you can choose other option like venv,
+you will just have to addapt the install command below.
+
+Clone this repository.
+
+The program needs to be run from the program folder in the terminal,
+
+Execute this Python Script to :
 
 `$ pipenv install requests`
 
 `$ pipenv install mysql-connector-python`
 
 `$ pipenv run python main.py`
-

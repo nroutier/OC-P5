@@ -4,7 +4,8 @@
 """ Module that defines the class Db_module """
 
 import mysql.connector
-from init import USER, PASSWORD, DATABASE, HOST, PORT
+import config
+from config import USER, PASSWORD, DATABASE, HOST, PORT
 
 
 class Db_module:

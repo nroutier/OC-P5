@@ -6,7 +6,7 @@
 import requests
 
 
-class Get_off_data:
+class Get_data_from_api:
     """ Class used to get the data from Open Food Fact API """
 
     def __init__(self, nb_cat, nb_prod):

@@ -4,14 +4,21 @@
 """ Module that defines the class Menu """
 
 import os
-import init
-from init import NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS
+import sys
+import config
+from config import NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS, USER, PASSWORD, \
+    DATABASE, HOST, PORT
 import Classes
-from Classes.Get_off_data import Get_off_data
+from Classes.Get_data_from_api import Get_data_from_api
+from Classes.Db_module import Db_module
 
 
 class Menu():
     """ Class used to generate the different Menus"""
+
+    def __init__(self):
+        """ Function to initiate an object from Menu class """
+        self.db = Db_module(USER, PASSWORD, DATABASE, HOST, PORT)
 
     def clear(self):
         """ Function that clears terminal screen """
@@ -31,22 +38,31 @@ class Menu():
         print("Description: ", product[1])
         print("____________________")
 
-    def end_program(self, user, db):
+    def end_program(self, user):
         """ Function to end the program """
         while True:
             inp = input("Revenir au menu (O) ou quitter le programme (Q)")
             if (inp in ["o", "O"]):
                 self.clear()
-                self.menu(user, db)
+                self.menu(user)
             elif (inp in ["q", "Q"]):
                 self.clear()
                 print("Merci d'avoir utilisé le programme")
-                del db
-                break
+                sys.exit()
             else:
                 print("Vous devez entrer O ou Q")
 
-    def menu(self, user, db):
+    def user(self, pseudo):
+        """ Function that handles user menu redirection """
+        if (pseudo == "root"):
+            self.menu_root(pseudo)
+        elif (self.db.get_user(pseudo)):
+            self.menu(pseudo)
+        else:
+            self.db.create_user(pseudo)
+            self.menu(pseudo)
+
+    def menu(self, user):
         """ Function that generate the program menu """
         self.clear()
         while True:
@@ -65,7 +81,7 @@ class Menu():
                 print("")
         if inp == 1:
             self.clear()
-            cats = db.get_categories(10)
+            cats = self.db.get_categories(10)
             while True:
                 print("Vous avez le choix entre les catégories suivantes:")
                 print("__________________________________________________")
@@ -87,7 +103,7 @@ class Menu():
                         " à une catégorie")
                     print("")
             self.clear()
-            products = db.get_products(cats[inp - 1][1], 10)
+            products = self.db.get_products(cats[inp - 1][1], 10)
             while True:
                 print("Vous avez le choix entre les aliments suivants:")
                 print("_______________________________________________")
@@ -111,7 +127,7 @@ class Menu():
             product = products[inp - 1]
             self.print_product(product)
             if products[inp - 1][2] != "a":
-                bestproduct = db.get_bestproduct(products[inp - 1][5])
+                bestproduct = self.db.get_bestproduct(products[inp - 1][5])
                 print("")
                 print(
                     "Vous pourriez remplacer cet aliment par le suivant",
@@ -122,7 +138,10 @@ class Menu():
                     inp = input("Souhaitez-vous sauvegarder ce substitut ? \
 O/N: ")
                     if (inp in ["o", "O"]):
-                        db.save_product(bestproduct[0], bestproduct[6], user)
+                        self.db.save_product(
+                            bestproduct[0],
+                            bestproduct[6],
+                            user)
                         break
                     elif (["n", "N"]):
                         break
@@ -136,7 +155,10 @@ O/N: ")
                     inp = input("Souhaitez-vous sauvegarder ce substitut ? \
 O/N: ")
                     if (inp in ["o", "O"]):
-                        db.save_product(bestproduct[0], bestproduct[6], user)
+                        self.db.save_product(
+                            bestproduct[0],
+                            bestproduct[6],
+                            user)
                         break
                     elif (["n", "N"]):
                         break
@@ -144,10 +166,10 @@ O/N: ")
                         self.clear()
                         print("Vous devez répondre par 'O' ou 'N'")
                         print("")
-            self.end_program(user, db)
+            self.end_program(user)
         elif inp == 2:
             self.clear()
-            saved_products = db.get_savedproducts(user)
+            saved_products = self.db.get_savedproducts(user)
             while True:
                 print("Voici les aliments que vous avez sauvegardé: ")
                 print("_________________________________________________")
@@ -163,7 +185,7 @@ O/N: ")
                     except ValueError:
                         pass
                     if inp in range(1, saved_products.__len__() + 1):
-                        saved_product = db.get_product(
+                        saved_product = self.db.get_product(
                             saved_products[inp - 1][0])
                         self.print_product(saved_product[0])
                     else:
@@ -176,9 +198,9 @@ O/N: ")
                     break
                 else:
                     print("Vous devez entrer O ou N")
-            self.end_program(user, db)
+            self.end_program(user)
 
-    def menu_root(self, user, db):
+    def menu_root(self, user):
         """ Function that generate the adminitrator menu """
         while True:
             print("Vous êtes connecté en tant qu'administrateur, voulez vous:")
@@ -199,15 +221,17 @@ O/N: ")
                 print("Vous devez entrer un chiffre en 1 et 3")
                 print("")
         if inp == 1:
-            check = db.check_db()
-            if (check):
+            if (self.db.check_db()):
                 print("La base de données a déjà été alimentée")
             else:
-                api = Get_off_data(NUMBER_OF_CATEGORIES, NUMBER_OF_PRODUCTS)
+                api = Get_data_from_api(
+                    NUMBER_OF_CATEGORIES,
+                    NUMBER_OF_PRODUCTS)
                 api.getdata()
-                db.feeddb(api.cats)
+                self.db.feeddb(api.cats)
                 print("La base de données vient d'être alimentée")
+                del api
         elif (inp == 2):
-            db.resetdb()
+            self.db.resetdb()
         elif (inp == 3):
-            self.menu(user, db)
+            self.menu(user)
