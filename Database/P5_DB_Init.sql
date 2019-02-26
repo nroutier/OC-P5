@@ -2,10 +2,10 @@
 CREATE DATABASE OC_P5 CHARACTER SET 'utf8';
 
 -- Creating the user
-CREATE USER 'svc_oc_p5' IDENTIFIED BY 'passw0rd';
+CREATE USER 'username' IDENTIFIED BY 'password';
 
 -- Giving all privelege to user svc_oc_p5
-GRANT ALL PRIVILEGES ON OC_P5.* TO 'svc_oc_p5';
+GRANT ALL PRIVILEGES ON OC_P5.* TO 'username';
 
 -- Working on the database
 USE OC_P5;
